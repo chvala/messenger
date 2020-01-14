@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ public class myUser implements UserDetails {
     private String password;
     @NotBlank
     private String email;
+    @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     private Set<GrantedAuthority> authorities = new HashSet<>();

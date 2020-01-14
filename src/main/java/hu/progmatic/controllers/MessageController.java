@@ -2,9 +2,7 @@ package hu.progmatic.controllers;
 
 import hu.progmatic.modell.Message;
 import hu.progmatic.services.MessageService;
-import hu.progmatic.session.UserSessionDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +18,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class MessageController {
 
 
-
     private MessageService messageService;
+
     @Autowired
     public MessageController(MessageService messageService) {
         this.messageService = messageService;
@@ -41,8 +39,9 @@ public class MessageController {
                                @RequestParam(value = "ID", required = false, defaultValue = "0") Integer ID,
                                @RequestParam(value = "nameOrder", required = false, defaultValue = "123") String nameOrder,
                                @RequestParam(value = "text", defaultValue = "", required = false) String text,
+                               @RequestParam(value = "hide", defaultValue = "true", required = false) boolean isHidden,
                                Model model) {
-        List<Message> filteredMessages = messageService.filterMessages(nameOrder, max, ID, text);
+        List<Message> filteredMessages = messageService.filterMessages(nameOrder, max, ID, text, isHidden);
         model.addAttribute("messageList", filteredMessages);
         return "Message";
     }

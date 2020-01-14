@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-dark">
@@ -45,11 +46,13 @@
         </td>
 
 
+            <label for="ctrlSelect"><h5>Ordering by</h5></label>
         <select class="btn btn-secondary btn-lg active mr-2" name="nameOrder" id="ctrlSelect">
-            <label for="ctrlSelect">Ordering</label>
             <option value="123">ID</option>
             <option value="abc">Name</option>
             <option value="cba">Name desc</option>
+            <option value="isDeleted">Show just the deleted</option>
+
         </select>
 
         <div>
@@ -57,8 +60,12 @@
             <input class="btn btn-outline-primary btn-lg align-self-center" type="text" name="text"
                    placeholder="Search here...">
             <input type="submit" class="btn btn-primary btn-lg" value="Search"/>
-        </div>
 
+        </div>
+        <form action="/messagetable" data-sec-authorize="hasRole('ADMIN')">
+            <input type="checkbox" size="large" name="hide" value="false"> Show deleted message<br>
+            <input type="submit" value="Submit">
+        </form>
 
     </form>
     <table class="table table-striped">
@@ -81,7 +88,6 @@
 
             <td data-sec-authorize="hasRole('ADMIN')">
                 <a data-th-href="@{/delete/{ID}(ID=${Message.ID})}" role="button" class="btn btn-outline-danger btn-sm">Delete</a>
-
             </td>
 
 

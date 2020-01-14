@@ -2,10 +2,7 @@ package hu.progmatic.modell;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class Message {
@@ -19,16 +16,17 @@ public class Message {
     @Size(min = 2, max = 30)
     @NotBlank
     private String text;
-    private boolean saveForLater = false;
+    private boolean isHidden = false;
 
-    public boolean saveForLater() {
-        return saveForLater;
+    public boolean isHidden() {
+        return isHidden;
     }
 
-    public void saveForLater(boolean answer) {
-        saveForLater = answer;
+    public void isHidden(boolean answer) {
+        isHidden = answer;
     }
 
+    @Past
     @DateTimeFormat(pattern = "yyyy/MMMM/dd HH:mm")
     private LocalDateTime creationDate;
     private Integer ID;

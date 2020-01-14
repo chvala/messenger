@@ -28,11 +28,15 @@ public class MessageService {
         messages.add(new Message(counter++, "Béla5", "Béla 3. üzenete.", LocalDateTime.now()));
     }
 
-    public List<Message> filterMessages(String nameOrder, Integer max, Integer ID, String text) {
+    public List<Message> filterMessages(String nameOrder, Integer max, Integer ID, String text, boolean isHidden) {
         List<Message> filteredMessages = messages;
         // System.out.println(userSessionDetails.getName());
         Stream<Message> filteredMessagesStream = filteredMessages.stream();
 
+
+        if (isHidden) {
+            filteredMessagesStream = filteredMessagesStream.filter(m -> !m.isHidden());
+        }
 
         if (nameOrder != null) {
             if (nameOrder.equals("abc")) {
@@ -41,8 +45,9 @@ public class MessageService {
                 filteredMessagesStream = filteredMessagesStream.sorted(Comparator.comparing(Message::getAuthor).reversed());
             } else if (nameOrder.equals("123")) {
                 filteredMessagesStream = filteredMessagesStream.sorted(Comparator.comparing(Message::getID));
+            } else if (nameOrder.equals("isDeleted")) {
+                filteredMessagesStream = filteredMessagesStream.filter(Message::isHidden);
             }
-
         }
 
         filteredMessages = filteredMessagesStream

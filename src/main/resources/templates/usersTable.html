@@ -74,13 +74,24 @@
                     <td data-th-text="${{myUser.email}}"></td>
                     <td data-th-text="${myUser.birthDate}"></td>
 
-
                     <td data-sec-authorize="hasRole('ADMIN')">
-                        <a data-th-href="@{/delete/{ID}(ID=${Message.ID})}" role="button"
+                        <a data-th-href="@{/usersTable/{username}(username=${myUser.username})}" role="button"
                            class="btn btn-outline-danger btn-sm">Delete</a>
                     </td>
 
-
+                    <form method="post" data-th-action="@{/usersTable/{username}(username=${myUser.username})}" class="form-inline">
+                    <td>
+                        <div class="dropdown" data-sec-authorize="hasRole('ADMIN')">
+                                <label for="changeRole">Change Role</label>
+                            <select class="btn btn-secondary btn-sm active mr-2" name="changeRole" id="changeRole">
+                                <option value="ROLE_ADMIN">Admin</option>
+                                <option value="ROLE_USER">User</option>
+                            </select>
+                            <input type="submit" class="btn btn-warning btn-sm" value="Submit change"/>
+                        </div>
+                    </td>
+                    </form>
+                </tr>
             </div>
         </table>
     </div>

@@ -30,6 +30,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/home").permitAll()
                 .antMatchers("/Register").permitAll()
+                .antMatchers("/delete/*").hasRole("ADMIN")
                 .antMatchers("/webjars/bootstrap/**", "/webjars/jquery/**", "/webjars/popper.js/**").permitAll()
 
                 .antMatchers("/Statistic").hasRole("ADMIN")
@@ -44,7 +45,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     //     return "userRegistration";
     // }
 
-    @Bean
+   /* @Bean
     public UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("user").
@@ -52,7 +53,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
         manager.createUser(User.withUsername("admin").
                 password("admin").roles("ADMIN").build());
         return manager;
-    }
+    }*/
 
 
     @SuppressWarnings("deprecation")

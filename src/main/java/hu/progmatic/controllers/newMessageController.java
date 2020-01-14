@@ -26,7 +26,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class newMessageController {
     private MessageService messageService;
     private UserSessionDetails userSessionDetails;
-    private InMemoryUserDetailsManager userDetailsService;
     private myUser myuser;
 
 
@@ -35,7 +34,6 @@ public class newMessageController {
         this.messageService = messageService;
         this.myuser = myuser;
         this.userSessionDetails = userSessionDetails;
-        this.userDetailsService = (InMemoryUserDetailsManager) userDetailsService;
     }
 
 
@@ -60,7 +58,8 @@ public class newMessageController {
         stats.putIfAbsent(name, 0);
         stats.put(name, stats.get(name) + 1);
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        myUser user = (myUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         userSessionDetails.setName(user.getUsername());
         userSessionDetails.setSentMessagesCounter(userSessionDetails.getSentMessagesCounter() + 1);
