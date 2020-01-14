@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+
+
+<body>
+<nav class="navbar navbar-expand-lg bg-dark">
+    <a class="navbar-brand" href="/messagetable">Messages</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <form data-th-action="@{/logout}" method="post">
+        <button class="btn btn-secondary btn-lg active mr-2 ml-2" type="submit" aria-pressed="true">Logout</button>
+    </form>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="Messages">
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <form method="get" action="/usersTable" class="form-inline">
+
+
+        <a href="newMessage" class="btn btn-primary btn-lg active mr-2" role="button" aria-pressed="true">New
+            message</a>
+
+
+        <a href="home" class="btn btn-secondary btn-lg active mr-2" role="button" aria-pressed="true">Back to
+            homepage</a>
+
+        <a href="Statistic" class="btn btn-secondary btn-lg active mr-2" role="button"
+           aria-pressed="true">Statistic</a>
+
+
+        <select class="btn btn-secondary btn-lg active mr-2" name="nameOrder" id="ctrlSelect">
+            <label for="ctrlSelect">Ordering</label>
+            <option value="123">ID</option>
+            <option value="abc">Name</option>
+            <option value="cba">Name desc</option>
+        </select>
+
+
+        <input class="btn btn-outline-primary btn-lg align-self-center" type="text" name="text"
+               placeholder="Search here...">
+        <input type="submit" class="btn btn-primary btn-lg" value="Search"/>
+
+
+    </form>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Birth Date</th>
+            </tr>
+            </thead>
+            <div>
+                <tbody>
+                <tr data-th-each="myUser: ${usersTable}">
+                    <td data-th-text="${myUser.username}"></td>
+                    <td data-th-text="${myUser.password}"></td>
+                    <td data-th-text="${{myUser.email}}"></td>
+                    <td data-th-text="${myUser.birthDate}"></td>
+
+
+                    <td data-sec-authorize="hasRole('ADMIN')">
+                        <a data-th-href="@{/delete/{ID}(ID=${Message.ID})}" role="button"
+                           class="btn btn-outline-danger btn-sm">Delete</a>
+                    </td>
+
+
+            </div>
+        </table>
+    </div>
+</div>
+</body>
+</html>

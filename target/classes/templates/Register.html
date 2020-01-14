@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="cssFiles/Register.css">
+    <script src="JavaScriptFiles/Register.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark">
+    <a class="navbar-brand" href="/messagetable">Messages</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a href="/logout" class="btn btn-secondary btn-lg active mr-2 ml-2" role="button" aria-pressed="true">Logout</a>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="Messages">
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <form data-th-action="@{/Register}" data-th-object="${user}" method="post">
+        <h4>Register</h4>
+        <h5>Please fill in this form to create an account.</h5>
+        <hr>
+        <div>
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter username" data-th-field="*{username}" required>
+        </div>
+        <p data-th-if="${#fields.hasErrors('username')}" data-th-errors="*{username}">Name Error</p>
+        <fieldset>
+        <div>
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" data-th-field="*{password}" required>
+        </div>
+
+        <div>
+            <label for="password-repeat"><b>Repeat</b></label>
+            <input type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password" required>
+        </div>
+        </fieldset>
+
+        <div>
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="email" required>
+        </div>
+        <div>
+            <label for="birthDate"><b>Birth Day</b></label>
+            <input type="date" placeholder="birthDate" data-th-field="*{birthDate}" required>
+        </div>
+        <div>
+
+            <input type="submit" class="btn btn-primary btn-lg active" value="Submit"/>
+
+        </div>
+        <hr>
+
+        <div class="container signin">
+            <p>Already have an account? <a href="/Login">Sign in</a>.</p>
+        </div>
+    </form>
+</div>
+</body>
+</html>
