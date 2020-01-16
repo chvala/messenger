@@ -7,8 +7,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="cssFiles/Register.css">
-    <script src="JavaScriptFiles/Register.js"></script>
+    <link rel="stylesheet" type="text/css" href="/style/Register.css">
+    <script src="../static/Register.js"></script>
 
 </head>
 <body>
@@ -40,25 +40,31 @@
             <label for="password"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" data-th-field="*{password}" required>
         </div>
+            <p data-th-if="${#fields.hasErrors('password')}" data-th-errors="*{password}">Name Error</p>
 
         <div>
-            <label for="password-repeat"><b>Repeat</b></label>
-            <input type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password" required>
+            <label for="rePassword"><b>Repeat</b></label>
+            <input type="password" placeholder="Confirm Password" name="rePassword" id="rePassword" required>
         </div>
+            <p data-th-if="${#fields.hasErrors('rePassword')}" data-th-errors="*{rePassword}">Name Error</p>
+
         </fieldset>
 
         <div>
             <label for="email"><b>Email</b></label>
             <input type="text" placeholder="Enter Email" name="email" required>
         </div>
+        <p data-th-if="${#fields.hasErrors('email')}" data-th-errors="*{email}">Name Error</p>
+
         <div>
             <label for="birthDate"><b>Birth Day</b></label>
-            <input type="date" placeholder="birthDate" data-th-field="*{birthDate}" required>
+            <input type="date" placeholder="birthDate" data-th-field="*{birthDate}">
         </div>
+
+        <p data-th-if="${#fields.hasErrors('birthDate')}" data-th-errors="*{birthDate}">Name Error</p>
+
         <div>
-
             <input type="submit" class="btn btn-primary btn-lg active" value="Submit"/>
-
         </div>
         <hr>
 

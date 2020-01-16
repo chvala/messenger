@@ -6,6 +6,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class Message {
+
     @NotNull
     @Size(min = 2, max = 30, message = "Not between {2} and {1} characters!")
     @Pattern(regexp = "^[A-Z].*", message = "Doesn't start with capital letter")

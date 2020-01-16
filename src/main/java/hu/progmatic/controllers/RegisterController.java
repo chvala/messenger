@@ -2,9 +2,9 @@ package hu.progmatic.controllers;
 
 import hu.progmatic.modell.myUser;
 import hu.progmatic.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,15 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 public class RegisterController {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(RegisterController.class);
 
     @Autowired
     public RegisterController(UserService userService) {
@@ -33,6 +32,7 @@ public class RegisterController {
     @RequestMapping(value = {"/Register"}, method = GET)
     public String Register(@ModelAttribute("user") myUser user) {
 
+        LOGGER.info("Register method started");
 
         return "Register";
     }
@@ -42,16 +42,17 @@ public class RegisterController {
     public String registration(@Valid @ModelAttribute("user") myUser user, BindingResult bindingResult, Model model) {
 
         if (userService.userExists(user.getUsername())) {
-            bindingResult.rejectValue("username", "username", "User already exist");
+            bindingResult.rejectValue("username", "username", "Username already exist");
             return "Register";
-
+        } else if (bindingResult.hasErrors()) {
+            return "Register";
         } else {
             userService.createUser(user);
-            System.out.println(user.getBirthDate());
-            System.out.println(user.getEmail());
+            LOGGER.debug("username: {}, password: {}, Authorities: {}, birthDate: {}", user.getUsername(), user.getPassword(), user.getAuthorities(), user.getBirthDate());
+
 
             HashMap<String, myUser> alluserMap = userService.getUsers();
-                alluserMap.put(user.getUsername(), user);
+            alluserMap.put(user.getUsername(), user);
 
 
             return "redirect:/Login";

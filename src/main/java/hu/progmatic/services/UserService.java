@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class UserService implements UserDetailsService {
         creatUser();
     }
 
-    public void createUser(myUser user) {
+    public void createUser(@Valid myUser user) {
         users.put(user.getUsername(), user);
     }
 

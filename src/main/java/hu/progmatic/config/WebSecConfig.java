@@ -30,11 +30,10 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/home").permitAll()
                 .antMatchers("/Register").permitAll()
-                .antMatchers("/delete/*").hasRole("ADMIN")
+                .antMatchers("/style/*","/images/*" ).permitAll()
+                .antMatchers("/delete/*", "/usersTable").hasRole("ADMIN")
                 .antMatchers("/webjars/bootstrap/**", "/webjars/jquery/**", "/webjars/popper.js/**").permitAll()
-
                 .antMatchers("/Statistic").hasRole("ADMIN")
-
                 .anyRequest().authenticated();
     }
 

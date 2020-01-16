@@ -1,0 +1,14 @@
+img {
+
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+}
+a {
+    color: dodgerblue;
+}
+.div {
+    width: 50%;
+    background-color: #4CAF50;
+    color: white;
+}

@@ -20,7 +20,6 @@ public class filter implements Filter {
         servletRequest.setCharacterEncoding("UTF-8");
         servletResponse.setContentType("text/html; charset=UTF-8");
         filterChain.doFilter(servletRequest, servletResponse);
-        servletRequest.getParameterMap().forEach((k, v) -> System.out.println(k + ": " + Arrays.toString(v)));
     }
 
     @Override

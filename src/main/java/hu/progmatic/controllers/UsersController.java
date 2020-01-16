@@ -21,8 +21,8 @@ public class UsersController {
 
 
     private UserService userService;
-    // PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    // String hashedPassword = passwordEncoder.encode(password);
+
+
     @Autowired
     public UsersController(UserService userService) {
         this.userService = userService;
@@ -39,8 +39,7 @@ public class UsersController {
     @PostMapping(value = "/usersTable/{username}")
     public String changeRole(@PathVariable("username") String username,
                              @RequestParam("changeRole") String role) {
-        System.out.println("Name: " + username + " --- changing from: "+ userService.loadUserByUsername(username).getAuthorities()
-                +" to : " + role);
+
 
         myUser changeUser = (myUser) userService.loadUserByUsername(username);
         changeUser.setAuthorities(Collections.singleton(new SimpleGrantedAuthority(role)));

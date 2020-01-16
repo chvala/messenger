@@ -1,6 +1,8 @@
 package hu.progmatic.services;
 
 import hu.progmatic.modell.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,7 @@ import java.util.stream.Stream;
 
 @Service
 public class MessageService {
+    private static Logger LOGGER = LoggerFactory.getLogger(MessageService.class);
     public static int counter = 1;
     public List<Message> messages = new ArrayList<>();
 
@@ -30,7 +33,8 @@ public class MessageService {
 
     public List<Message> filterMessages(String nameOrder, Integer max, Integer ID, String text, boolean isHidden) {
         List<Message> filteredMessages = messages;
-        // System.out.println(userSessionDetails.getName());
+        LOGGER.info("filteredMessages method started");
+        LOGGER.debug("id: {}, nameOrder: {}, text: {}", ID, nameOrder, text);
         Stream<Message> filteredMessagesStream = filteredMessages.stream();
 
 

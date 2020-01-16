@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+
+<body>
+<div class="container">
+    <h1> You shall not pass!!!! </h1>
+    <img src="/images/notPass.jpg.png">
+    <p>
+        <a class="btn btn-primary" data-toggle="collapse" href="/home" role="button"
+           aria-expanded="false" aria-controls="collapseExample">
+            Back to home page
+        </a>
+    </p>
+    <p data data-th-text="${IOExceptionMessage}"></p>
+    <div data-th-each="StackTraceElement: ${IOExceptionStackTrace}">
+        <p data-th-text="${StackTraceElement}"></p>
+    </div>
+</div>
+
+</body>
+</html>

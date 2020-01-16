@@ -9,6 +9,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class LoginOutController {
 
 
+    public LoginOutController() {
+    }
+
     @RequestMapping(value = {"/Login"}, method = GET)
     public String login() {
         return "Login";

@@ -19,6 +19,17 @@ public class myUser implements UserDetails {
     @NotBlank
     private String password;
     @NotBlank
+    private String rePassword;
+
+    public String getRePassword() {
+        return rePassword;
+    }
+
+    public void setRePassword(String rePassword) {
+        this.rePassword = rePassword;
+    }
+
+    @NotBlank
     private String email;
     @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
