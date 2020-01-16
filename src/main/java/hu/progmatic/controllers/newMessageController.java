@@ -6,8 +6,6 @@ import hu.progmatic.services.MessageService;
 import hu.progmatic.session.UserSessionDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -24,6 +25,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 public class newMessageController {
+
+    @PersistenceContext
+    EntityManager em;
+
     private MessageService messageService;
     private UserSessionDetails userSessionDetails;
     private myUser myuser;
@@ -36,7 +41,6 @@ public class newMessageController {
         this.userSessionDetails = userSessionDetails;
     }
 
-
     @RequestMapping(value = {"/newMessage"}, method = GET)
     public String newMessage(Model model) {
         Message m = new Message();
@@ -45,7 +49,7 @@ public class newMessageController {
         return "newMessage";
     }
 
-
+    @Transactional
     @PostMapping(path = "/createMessage")
     public String createMessage(@Valid @ModelAttribute("Message") Message m, BindingResult bindingResult, myUser myuser) {
 
@@ -64,8 +68,8 @@ public class newMessageController {
         userSessionDetails.setName(user.getUsername());
         userSessionDetails.setSentMessagesCounter(userSessionDetails.getSentMessagesCounter() + 1);
         m.setCreationDate(LocalDateTime.now());
-        m.setID(messageService.getSize() + 1);
-
+        //m.setID(messageService.getSize() + 1);
+        em.persist(m);
         messageService.add(m);
         return "redirect:/messagetable";
     }

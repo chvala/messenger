@@ -2,22 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/style/myError.css">
 
 </head>
 
 <body>
 <div class="container">
-    <h1> Something went wrong go back to the home page </h1>
+    <h1> You shall not pass!!!! </h1>
+    <img src="/images/notPass.jpg">
     <p>
         <a class="btn btn-primary" data-toggle="collapse" href="/home" role="button"
            aria-expanded="false" aria-controls="collapseExample">
             Back to home page
         </a>
     </p>
-    <img src="/images/Error.jpg">
-    <p data data-th-text="${exceptionMessage}"></p>
-    <div data-th-each="StackTraceElement: ${stackTrace}">
+    <p data data-th-text="${IOExceptionMessage}"></p>
+    <div data-th-each="StackTraceElement: ${IOExceptionStackTrace}">
         <p data-th-text="${StackTraceElement}"></p>
     </div>
 </div>

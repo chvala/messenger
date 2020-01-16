@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
-
+// CREATE SCHEMA `messengerapp` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci ;
 @Service
 public class UserService implements UserDetailsService {
 

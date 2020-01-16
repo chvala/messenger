@@ -9,9 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 @Controller
 public class DeleteController {
 
+    @PersistenceContext
+    EntityManager em;
 
     private MessageService messageService;
 
@@ -20,6 +26,7 @@ public class DeleteController {
         this.messageService = messageService;
     }
 
+    @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = {"/delete/{ID}"})
     public String delete(@PathVariable Integer ID) {
@@ -28,9 +35,9 @@ public class DeleteController {
                 .getAuthentication()
                 .getAuthorities()
                 .contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-
             // messageService.delete(ID);
-            messageService.getMessage(ID - 1).isHidden(true);
+
+            messageService.getMessage(ID).isHidden(true);
         }
         return "redirect:/messagetable";
     }
