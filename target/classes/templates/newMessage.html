@@ -9,17 +9,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-dark">
-    <a class="navbar-brand" href="/messagetable">Messages</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="Messages">
-        </div>
-    </div>
-</nav>
+<div data-th-replace="Navbar :: Navbar"></div>
+
 <div class="container">
     <div data-sec-authorize="isAuthenticated()">
 
@@ -28,39 +19,20 @@
 
             <div class="form-group">
                 <form method="POST" data-th-action="@{/createMessage}" data-th-object="${Message}">
-
-
-                    <input data-th-field="*{author}"
-                           class="form-control"
-                           data-th-classappend="${#fields.hasErrors('author')} ? is-invalid : ''"
-                           type="text"
-                           placeholder="Name">
-
-                    <div class="invalid-feedback">
-                        Wrong name input.
-                        <p data-th-if="${#fields.hasErrors('author')}" data-th-errors="*{author}">Name Error</p>
+                    <textarea data-th-field="*{text}" class="form-control" data-th-errorclass="is-invalid" type="text" placeholder="Here write your text" rows="5"></textarea>
+                    <div class="invalid-feedback " data-th-if="${#fields.hasErrors('text')}" data-th-errors="*{text}">Wrong text input!</div>
+                    <div>
+                        <input type="submit" class="btn btn-primary btn-sm active" value="Submit"/>
+                        <select data-th-field="*{topic.title}">
+                            <option data-th-each="Topic: ${topicList}"
+                                    data-th-text="${Topic.getTitle()}"
+                                    data-th-value="${Topic.getTitle()}">Topics
+                            </option>
+                        </select>
                     </div>
-
-
-                    <textarea data-th-field="*{text}"
-                              class="form-control"
-                              data-th-errorclass="is-invalid"
-                              type="text"
-                              placeholder="Here write your text"
-                              rows="5">
-            </textarea>
-                    <div class="invalid-feedback " data-th-if="${#fields.hasErrors('text')}" data-th-errors="*{text}">
-                        Wrong text input!!!!!!!44!4!4!!4!
-                    </div>
-
-
-                    <a href="/messagetable" class="btn btn-secondary btn-lg active" role="button"
-                       aria-pressed="true">Messages</a>
-                    <a href="home" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Home</a>
-
-                    <input type="submit" class="btn btn-primary btn-lg active" value="Submit"/>
-
                 </form>
+                <a href="/newTopic" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Create new
+                    Topic</a>
             </div>
         </label>
     </div>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    </head>
+<body>
+<div data-th-replace="Navbar :: Navbar"></div>
+
+<div class="container">
+    <div data-sec-authorize="isAuthenticated()">
+
+
+        <label><h2>Create topic</h2>
+
+            <div class="form-group">
+                <form method="POST" data-th-action="@{/createTopic}" data-th-object="${Topic}">
+
+                    <input data-th-field="*{title}"
+                           class="form-control"
+                           type="text"
+                           placeholder="Title of the topic">
+                    <div>
+                        <input type="submit" class="btn btn-primary btn-lg active" value="Create New Topic"/>
+                    </div>
+                    <p data-th-if="${#fields.hasErrors('title')}" data-th-errors="*{title}">Name Error</p>
+
+                </form>
+            </div>
+        </label>
+    </div>
+</div>
+</body>

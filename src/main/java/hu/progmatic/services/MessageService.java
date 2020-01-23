@@ -1,6 +1,7 @@
 package hu.progmatic.services;
 
 import hu.progmatic.modell.Message;
+import hu.progmatic.modell.Topic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,30 +17,12 @@ import java.util.stream.Stream;
 @Service
 public class MessageService {
 
-
     @PersistenceContext
     EntityManager em;
 
-
     private static Logger LOGGER = LoggerFactory.getLogger(MessageService.class);
-    public static int counter = 1;
 
-    //  public List<Message> messages = new ArrayList<>();
-    //  {
-    //      messages.add(new Message(counter++, "Aladár", "Mz/x jelentkezz jelentkezz", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "Kriszta", "Hanem Tiszta vidd vissza majd a Kriszta megissza", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "Béla", "Ez a Béla üzenete mindenkienki részére", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "Tódor", "Miau, okos tódór", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "Valaki", "Valaki aki nem Te vagy én.", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "Te", "Vau Vau Kutya vagy", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "Béla2", "Béla 2. üzenete mindenkienkinek.", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "Zsófi", "Sziasztok", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "User", "Ez a szövege egy usernak", LocalDateTime.now()));
-    //      messages.add(new Message(counter++, "Béla5", "Béla 3. üzenete.", LocalDateTime.now()));
-    //  }
-
-
-    public List<Message> filterMessages(String nameOrder, Integer max, Integer ID, String text, boolean isHidden) {
+    public List<Message> filterMessages(String nameOrder, Integer max, Integer ID, String text, boolean isHidden, Integer topicID) {
         List<Message> messages = em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
         List<Message> filteredMessages = messages;
         LOGGER.info("filteredMessages method started");
@@ -60,27 +43,26 @@ public class MessageService {
                 filteredMessagesStream = filteredMessagesStream.sorted(Comparator.comparing(Message::getID));
             } else if (nameOrder.equals("isDeleted")) {
                 filteredMessagesStream = filteredMessagesStream.filter(Message::isHidden);
+            } else if (nameOrder.equals("topic")) {
+                filteredMessagesStream = filteredMessagesStream.sorted(Comparator.comparing(message -> message.getTopic().getTitle()));
             }
         }
-
+        if (topicID != null) {
+            filteredMessagesStream = filteredMessagesStream.filter(message -> message.getTopic().getID()==topicID);
+        }
         filteredMessages = filteredMessagesStream
                 .filter(m -> text == null ||
                         m.getText().contains(text) ||
                         m.getAuthor().contains(text) ||
-                        m.getCreationDate().toString().contains(text))
+                        m.getCreationDate().toString().contains(text) ||
+                        m.getTopic().getTitle().contains(text))
                 .collect(Collectors.toList());
-
-
         return filteredMessages;
     }
 
     @Transactional
     public Message getMessage(Integer ID) {
-        Message message = em.createQuery(
-                "SELECT m FROM Message m where m.ID=:ID", Message.class)
-                .setParameter("ID", ID)
-                .getSingleResult();
-
+        Message message = em.find(Message.class, ID);
         return message;
     }
 
@@ -90,17 +72,25 @@ public class MessageService {
         return messages.size();
     }
 
+    @Transactional
     public void add(Message message) {
-        List<Message> messages = em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
+        Topic topic = em.createQuery("Select t FROM Topic t where t.title=:name", Topic.class)
+                .setParameter("name", message.getTopic().getTitle()).getSingleResult();
+        message.setTopic(topic);
         em.persist(message);
-
-        messages.add(message);
     }
 
-    public void delete(Integer ID) {
+    public void hide(Integer ID) {
         List<Message> messages = em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
-
         messages.removeIf(message -> message.getID().equals(ID));
     }
 
+    @Transactional
+    public void delete(Integer ID) {
+        Message message = em.createQuery(
+                "SELECT m FROM Message m where m.ID=:ID", Message.class)
+                .setParameter("ID", ID)
+                .getSingleResult();
+        em.remove(message);
+    }
 }

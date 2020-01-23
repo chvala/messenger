@@ -1,5 +1,6 @@
 package hu.progmatic.controllers;
 
+import hu.progmatic.modell.Topic;
 import hu.progmatic.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,18 +29,28 @@ public class DeleteController {
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(value = {"/delete/{ID}"})
-    public String delete(@PathVariable Integer ID) {
+    @GetMapping(value = {"/hide/{ID}"})
+    public String hide(@PathVariable Integer ID) {
         if (SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getAuthorities()
                 .contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            // messageService.delete(ID);
-
             messageService.getMessage(ID).isHidden(true);
+            messageService.hide(ID);
         }
         return "redirect:/messagetable";
     }
+
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = {"/delete/{ID}"})
+    public String delete(@PathVariable Integer ID) {
+
+            messageService.delete(messageService.getMessage(ID).getID());
+
+        return "redirect:/messagetable";
+    }
+
 
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <title>Navbar</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark" data-th-fragment="Navbar">
+    <a class="navbar-brand" href="/messagetable">Messages</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="Messages">
+        </div>
+    <a href="home" class="btn btn-secondary btn-lg active mr-2" role="button" aria-pressed="true">Back to
+        homepage</a>
+    <a href="topicTable" class="btn btn-secondary btn-lg active mr-2" role="button"
+       aria-pressed="true">Topics info</a>
+    </div>
+    <form data-th-action="@{/logout}" method="post">
+        <button class="btn btn-secondary btn-lg active mr-2 ml-2" type="submit" aria-pressed="true">Logout</button>
+    </form>
+</nav>
+
+</body>
+</html>

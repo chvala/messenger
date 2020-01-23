@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+
+
+<body>
+<div data-th-replace="Navbar :: Navbar"></div>
+
+<div class="container mt-5">
+    <form method="get" action="/topicTable" class="form-inline">
+
+
+        <a href="newMessage" class="btn btn-primary btn-lg active mr-2" role="button" aria-pressed="true">New
+            message</a>
+
+
+        <a href="home" class="btn btn-secondary btn-lg active mr-2" role="button" aria-pressed="true">Back to
+            homepage</a>
+
+        <a href="Statistic" class="btn btn-secondary btn-lg active mr-2" role="button"
+           aria-pressed="true">Statistic</a>
+
+
+        <select class="btn btn-secondary btn-lg active mr-2" name="nameOrder" id="ctrlSelect">
+            <label for="ctrlSelect">Ordering</label>
+            <option value="123">ID</option>
+            <option value="abc">Name</option>
+            <option value="cba">Name desc</option>
+        </select>
+
+
+        <input class="btn btn-outline-primary btn-lg align-self-center" type="text" name="text"
+               placeholder="Search here...">
+        <input type="submit" class="btn btn-primary btn-lg" value="Search"/>
+
+
+    </form>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Go to messages</th>
+                <th scope="col">Topic Title</th>
+                <th scope="col">Delete Topic</th>
+            </tr>
+            </thead>
+            <div>
+                <tbody>
+                <tr data-th-each="Topic: ${topicList}">
+                    <td data-th-text="${Topic.ID}"></td>
+                    <td data-sec-authorize="hasRole('ADMIN')">
+                        <form data-th-action="@{/messagetable}">
+                            <input type="text" name="topicID" data-th-value="${Topic.ID}" hidden>
+                            <input type="Submit"  role="button" value="Messages"
+                                   class="btn btn-outline-primary btn-sm">
+                        </form>
+                    </td>
+
+                    <td data-th-text="${Topic.Title}"></td>
+
+                    <td data-sec-authorize="hasRole('ADMIN')">
+                        <a data-th-href="@{/topicTable/{ID}(ID=${Topic.ID})}" role="button"
+                           class="btn btn-outline-danger btn-sm">Delete</a>
+                    </td>
+
+                </tr>
+            </div>
+        </table>
+    </div>
+</div>
+</body>
+</html>

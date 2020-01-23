@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -37,12 +38,6 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
     }
 
-    // @RequestMapping(method = RequestMethod.GET, path = "/registerusers")
-    // @PreAuthorize("hasAuthority('GLOBAL_ADMINISTRATOR')")
-    // public String registerUsers(Model model) {
-    //     model.addAttribute("user", new User());
-    //     return "userRegistration";
-    // }
 
    /* @Bean
     public UserDetailsService userDetailsService() {
@@ -58,7 +53,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     @SuppressWarnings("deprecation")
     @Bean
     public static PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
 }

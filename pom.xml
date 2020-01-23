@@ -44,6 +44,14 @@
             <scope>test</scope>
         </dependency>
 
+     <!--
+       <dependency>
+           <groupId>com.butor</groupId>
+           <artifactId>message-dao</artifactId>
+           <version>1.0.26</version>
+       </dependency>
+     -->
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <title>oneComment</title>
+
+</head>
+<body>
+<div data-th-fragment="oneComment">
+
+
+    <div class="container">
+        <div class="form-group">
+            <form method="POST" data-th-action="@{/createComment/{ID}(ID=${Message.ID})}"
+                  data-th-object="${newMessage}">
+                <div class="card" style="margin: 50px 10px 10px 10px">
+                    <div class="card-header" data-th-field="*{author}">Author:
+                        <a data-th-text="${Message.author}"></a>
+                    </div>
+                    <div class="card-body">
+                        Text:
+                        <a data-th-text="${Message.text}"></a>
+                        <p class="card-text"></p>
+                        <textarea data-th-field="*{text}" class="form-control" data-th-errorclass="is-invalid" type="text" placeholder="Here write your comment" rows="3"></textarea>
+                    </div>
+                    <div class="card-footer">
+                        <div style="padding-bottom: 10px">
+                            <input type="submit" class="btn btn-primary btn-sm active" value="Leave comment"/>
+                        </div>
+                        <div>
+                            <p>
+                                <a class="btn btn-warning" data-toggle="collapse" href="oneComment.html" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Comments</a></p>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                        <div data-th-each="Message: ${comments}" class="card card-body">
+                                            <div data-th-text="${Message.author}"></div>
+                                            <div data-th-text="${Message.text}"></div>
+                                            <div data-th-text="${{Message.creationDate}}"></div>
+                                            <div data-th-text="${{Message.topic.title}}"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

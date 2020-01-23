@@ -1,66 +1,72 @@
 package hu.progmatic.services;
 
+import hu.progmatic.modell.Authorities;
 import hu.progmatic.modell.myUser;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashMap;
+
 // CREATE SCHEMA `messengerapp` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci ;
 @Service
 public class UserService implements UserDetailsService {
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    @PersistenceContext
+    EntityManager em;
 
-    private HashMap<String, myUser> users = new HashMap<>();
-
-    public UserService() {
-        creatUser();
+    @Autowired
+    public UserService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
+    private PasswordEncoder passwordEncoder;
+
+
+    @Transactional
     public void createUser(@Valid myUser user) {
-        users.put(user.getUsername(), user);
-    }
-
-    public void creatUser() {
-        myUser admin = new myUser("admin", "admin", "admin@admin.com", LocalDate.now());
-        myUser user = new myUser("user", "password", "user@user.com", LocalDate.now());
-        createUser(admin);
-        admin.setAuthorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")));
-        createUser(user);
-        user.setAuthorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        em.persist(user);
     }
 
     public void delete(myUser user) {
-        users.remove(user.getUsername());
+        em.remove(user);
     }
 
     public myUser getUser(myUser user) {
-        return users.get(user.getUsername());
+        return em.createQuery("select u from myUser u where u=:user", myUser.class).setParameter("user", user).getSingleResult();
     }
 
-    public HashMap<String, myUser> getUsers() {
-        return users;
-    }
-
-    public void setUsers(HashMap<String, myUser> users) {
-        this.users = users;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (users.containsKey(username)) {
-            return users.get(username);
-        } else {
+        try {
+            myUser user = em.createQuery("select u from myUser u where u.username=:username", myUser.class).setParameter("username", username).getSingleResult();
+            return user;
+        } catch (NoResultException e) {
+            logger.debug("User was not found: {}", username);
             throw new UsernameNotFoundException("User was not found: " + username);
         }
     }
 
     public boolean userExists(String user) {
-        return users.containsKey(user);
+        try {
+            em.createQuery("select u from myUser u where u=:user", myUser.class).setParameter("user", user).getSingleResult();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

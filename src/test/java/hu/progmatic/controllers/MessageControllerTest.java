@@ -29,13 +29,14 @@ public class MessageControllerTest {
     public void showUserData() throws Exception {
         MessageService ms = Mockito.mock(MessageService.class);
         List<Message> msgList = new ArrayList<>();
-        msgList.add(new Message(1, "asd", "asd", LocalDateTime.now()));
+        msgList.add(new Message("asd", "asd", LocalDateTime.now()));
         Mockito.when(ms.filterMessages(
                 Mockito.anyString(),
                 Mockito.anyInt(),
                 Mockito.anyInt(),
                 Mockito.anyString(),
-                Mockito.anyBoolean()))
+                Mockito.anyBoolean(),
+                Mockito.anyInt()))
                 .thenReturn(msgList);
         MockMvc mockMvc = MockMvcBuilders
                 .standaloneSetup(new MessageController(ms))
@@ -53,7 +54,8 @@ public class MessageControllerTest {
                 Mockito.anyInt(),
                 Mockito.anyInt(),
                 Mockito.anyString(),
-                Mockito.anyBoolean()))
+                Mockito.anyBoolean(),
+                Mockito.anyInt()))
                 .thenReturn(null);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new MessageController(ms)).build();
         mockMvc.perform(MockMvcRequestBuilders.get("/messagetable"))

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html lang="en">
 
 <head>
@@ -9,34 +9,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <style>
-    head {
-        color: #f1f1f1;
-    }
-    tr {
-        color: #f1f1f1;
-    }
-    body {
-        color: #f1f1f1;
-        background-size: cover;
-        background-image: url("https://images.unsplash.com/photo-1497250681960-ef046c08a56e?ixlib=rb-1.2.1&w=1000&q=80");
-    }
-</style>
+        head {
+            color: #f1f1f1;
+        }
+
+        tr {
+            color: #f1f1f1;
+        }
+
+        body {
+            color: #f1f1f1;
+            background-size: cover;
+            background-image: url("https://images.unsplash.com/photo-1497250681960-ef046c08a56e?ixlib=rb-1.2.1&w=1000&q=80");
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-dark">
-    <a class="navbar-brand" href="/messagetable">Messages</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <form data-th-action="@{/logout}" method="post">
-        <button class="btn btn-secondary btn-lg active mr-2 ml-2" type="submit" aria-pressed="true">Logout</button>
-    </form>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="Messages">
-        </div>
-    </div>
-</nav>
+<div data-th-replace="Navbar :: Navbar"></div>
 
 <div class="container mt-5">
     <form method="get" action="/messagetable" class="form-inline">
@@ -45,12 +34,13 @@
         <a href="newMessage" class="btn btn-primary btn-lg active mr-2" role="button" aria-pressed="true">New
             message</a>
 
-
-        <a href="home" class="btn btn-secondary btn-lg active mr-2" role="button" aria-pressed="true">Back to
-            homepage</a>
         <td data-sec-authorize="hasRole('ADMIN')">
             <a href="Statistic" class="btn btn-secondary btn-lg active mr-2" role="button"
                aria-pressed="true">Statistic</a>
+        </td>
+        <td data-sec-authorize="hasRole('ADMIN')">
+            <a href="topicTable" class="btn btn-secondary btn-lg active mr-2" role="button"
+               aria-pressed="true">Topics info</a>
         </td>
         <td data-sec-authorize="hasRole('ADMIN')">
             <a href="usersTable" class="btn btn-secondary btn-lg active mr-2" role="button"
@@ -58,12 +48,13 @@
         </td>
 
 
-            <label for="ctrlSelect"><h5>Ordering by</h5></label>
+        <label for="ctrlSelect"><h5>Ordering by</h5></label>
         <select class="btn btn-secondary btn-lg active mr-2" name="nameOrder" id="ctrlSelect">
             <option value="123">ID</option>
             <option value="abc">Name</option>
             <option value="cba">Name desc</option>
             <option value="isDeleted">Show just the deleted</option>
+            <option value="topic">Order by topic</option>
 
         </select>
 
@@ -87,17 +78,22 @@
             <th scope="col">Name</th>
             <th scope="col">Message</th>
             <th scope="col">Time</th>
+            <th scope="col">Topic Name</th>
             <th scope="col">Info</th>
         </tr>
         </thead>
         <tbody>
         <tr data-th-each="Message: ${messageList}">
-            <td data-th-text="${Message.ID}"></td>
-            <td data-th-text="${Message.Author}"></td>
+            <td><a data-th-href="@{/messagetable/{ID}(ID=${Message.ID})}" data-th-text="${Message.ID}">123</a></td>
+            <td data-th-text="${Message.author}"></td>
             <td data-th-text="${Message.text}"></td>
             <td data-th-text="${{Message.creationDate}}"></td>
+            <td data-th-text="${{Message.topic.title}}"></td>
 
 
+            <td data-sec-authorize="hasRole('ADMIN')">
+                <a data-th-href="@{/hide/{ID}(ID=${Message.ID})}" role="button" class="btn btn-outline-danger btn-sm">Hide</a>
+            </td>
             <td data-sec-authorize="hasRole('ADMIN')">
                 <a data-th-href="@{/delete/{ID}(ID=${Message.ID})}" role="button" class="btn btn-outline-danger btn-sm">Delete</a>
             </td>
