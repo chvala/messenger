@@ -1,5 +1,6 @@
 package hu.progmatic.controllers;
 
+import hu.progmatic.dto.MessageServiceDTO;
 import hu.progmatic.modell.Message;
 import hu.progmatic.services.MessageService;
 import org.slf4j.Logger;
@@ -12,10 +13,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,11 +58,19 @@ public class MessageController {
         List<Message> msgs = new ArrayList<>();
         msgs.add(msg);
         model.addAttribute("messageList", msgs);
-
         Thread.sleep(1000 * secondsToSleep);
         return "Message";
     }
-
+    @RequestMapping(path = "/messagetable/jason", method = RequestMethod.GET)
+    public @ResponseBody
+    List<MessageServiceDTO> messageTableJson(){
+        List<MessageServiceDTO> allMessages = messageService.findAllMessages();
+        return allMessages;
+    }
+    @DeleteMapping(path = "messagetable/delete/{ID}")
+    public @ResponseBody boolean restDelete(@PathVariable Integer ID) {
+        return messageService.delete(ID);
+    }
 
 
     @RequestMapping(value = {"/messagetable"}, method = GET)

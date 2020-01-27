@@ -46,11 +46,8 @@ public class DeleteController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = {"/delete/{ID}"})
     public String delete(@PathVariable Integer ID) {
-
             messageService.delete(messageService.getMessage(ID).getID());
-
         return "redirect:/messagetable";
     }
-
 
 }

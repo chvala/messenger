@@ -1,5 +1,6 @@
 package hu.progmatic.modell;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -43,9 +44,11 @@ public class Message {
 
     @ManyToOne
     private myUser myuser;
-
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "messageForComment")
     private List<Message> comments;
+    @JsonIgnore
     @ManyToOne
     private Message messageForComment;
 

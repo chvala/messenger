@@ -1,5 +1,6 @@
 package hu.progmatic.services;
 
+import hu.progmatic.dto.MessageServiceDTO;
 import hu.progmatic.modell.Message;
 import hu.progmatic.modell.Message_;
 import hu.progmatic.modell.Topic;
@@ -15,7 +16,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -100,6 +100,7 @@ public class MessageService {
 
         return message;
     }
+
     @Transactional
     public Message getMessage(Integer ID) {
         Message message = em.find(Message.class, ID);
@@ -123,12 +124,30 @@ public class MessageService {
         messages.removeIf(message -> message.getID().equals(ID));
     }
 
+    public List<MessageServiceDTO> findAllMessages() {
+        List<Message> msgs = em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
+        return msgs.stream().map(message -> {
+            MessageServiceDTO dto = new MessageServiceDTO();
+            dto.setAuthor(message.getAuthor());
+            dto.setHidden(message.isHidden());
+            dto.setID(message.getID());
+            dto.setText(message.getText());
+            dto.setTopic(message.getTopic());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+
     @Transactional
-    public void delete(Integer ID) {
-        Message message = em.createQuery(
-                "SELECT m FROM Message m where m.ID=:ID", Message.class)
-                .setParameter("ID", ID)
-                .getSingleResult();
-        em.remove(message);
+    public boolean delete(Integer ID) {
+        if (getMessage(ID) != null) {
+            Message message = em.createQuery(
+                    "SELECT m FROM Message m where m.ID=:ID", Message.class)
+                    .setParameter("ID", ID)
+                    .getSingleResult();
+            em.remove(message);
+            return true;
+        }
+        return false;
     }
 }

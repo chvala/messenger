@@ -1,5 +1,7 @@
 package hu.progmatic.modell;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Topic {
     @NotNull
     private String title;
 
+    @JsonIgnore
     @OneToMany(cascade = REMOVE, mappedBy = "topic")
     private List<Message> messages;
 
