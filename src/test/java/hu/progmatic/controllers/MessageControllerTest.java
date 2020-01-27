@@ -35,6 +35,7 @@ public class MessageControllerTest {
                 Mockito.anyInt(),
                 Mockito.anyInt(),
                 Mockito.anyString(),
+                Mockito.any(),
                 Mockito.anyBoolean(),
                 Mockito.anyInt()))
                 .thenReturn(msgList);
@@ -54,6 +55,7 @@ public class MessageControllerTest {
                 Mockito.anyInt(),
                 Mockito.anyInt(),
                 Mockito.anyString(),
+                Mockito.any(),
                 Mockito.anyBoolean(),
                 Mockito.anyInt()))
                 .thenReturn(null);

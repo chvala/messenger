@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8"/>
@@ -38,17 +38,14 @@
             <a href="Statistic" class="btn btn-secondary btn-lg active mr-2" role="button"
                aria-pressed="true">Statistic</a>
         </td>
-        <td data-sec-authorize="hasRole('ADMIN')">
-            <a href="topicTable" class="btn btn-secondary btn-lg active mr-2" role="button"
-               aria-pressed="true">Topics info</a>
-        </td>
+
         <td data-sec-authorize="hasRole('ADMIN')">
             <a href="usersTable" class="btn btn-secondary btn-lg active mr-2" role="button"
                aria-pressed="true">All User info</a>
         </td>
 
 
-        <label for="ctrlSelect"><h5>Ordering by</h5></label>
+        <label for="ctrlSelect" ><h5>Ordering by</h5></label>
         <select class="btn btn-secondary btn-lg active mr-2" name="nameOrder" id="ctrlSelect">
             <option value="123">ID</option>
             <option value="abc">Name</option>
@@ -62,8 +59,10 @@
 
             <input class="btn btn-outline-primary btn-lg align-self-center" type="text" name="text"
                    placeholder="Search here...">
-            <input type="submit" class="btn btn-primary btn-lg" value="Search"/>
-
+            <input type="submit" class="btn btn-primary btn-lg" style="padding-right: 20px" value="Search"/>
+            <input class="btn btn-outline-primary btn-lg align-self-center" type="date" name="time"
+                   placeholder="Search by text here...">
+            <input type="submit" class="btn btn-primary btn-lg" style="padding-right: 20px" value="Search Date"/>
         </div>
         <form action="/messagetable" data-sec-authorize="hasRole('ADMIN')">
             <input type="checkbox" size="large" name="hide" value="false"> Show deleted message<br>

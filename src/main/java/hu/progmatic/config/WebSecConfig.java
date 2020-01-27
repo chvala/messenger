@@ -38,18 +38,6 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
     }
 
-
-   /* @Bean
-    public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user").
-                password("password").roles("USER").build());
-        manager.createUser(User.withUsername("admin").
-                password("admin").roles("ADMIN").build());
-        return manager;
-    }*/
-
-
     @SuppressWarnings("deprecation")
     @Bean
     public static PasswordEncoder passwordEncoder() {

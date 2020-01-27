@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -10,47 +10,49 @@
 
 </head>
 <body>
-<div data-th-fragment="oneComment">
-
-
-    <div class="container">
-        <div class="form-group">
-            <form method="POST" data-th-action="@{/createComment/{ID}(ID=${Message.ID})}"
-                  data-th-object="${newMessage}">
-                <div class="card" style="margin: 50px 10px 10px 10px">
-                    <div class="card-header" data-th-field="*{author}">Author:
-                        <a data-th-text="${Message.author}"></a>
+<div class="container" >
+    <div class="form-group" data-th-fragment="comments">
+        <form method="POST" data-th-action="@{/createComment/{ID}(ID=${Message.ID})}" data-th-object="${newMessage}">
+            <div class="card" style="margin: 50px 10px 10px 10px">
+                <div class="card-header" data-th-field="*{author}">Author:
+                    <a data-th-text="${Message.author}"></a>
+                </div>
+                <div class="card-body">
+                    Text:
+                    <a data-th-text="${Message.text}"></a>
+                    <p class="card-text"></p>
+                    <textarea data-th-field="*{text}" class="form-control" data-th-errorclass="is-invalid" type="text"
+                              placeholder="Here write your comment" rows="3"></textarea>
+                </div>
+                <div class="card-footer">
+                    <div style="padding-bottom: 10px">
+                        <input type="submit" class="btn btn-primary btn-sm active" value="Leave comment"/>
                     </div>
-                    <div class="card-body">
-                        Text:
-                        <a data-th-text="${Message.text}"></a>
-                        <p class="card-text"></p>
-                        <textarea data-th-field="*{text}" class="form-control" data-th-errorclass="is-invalid" type="text" placeholder="Here write your comment" rows="3"></textarea>
-                    </div>
-                    <div class="card-footer">
-                        <div style="padding-bottom: 10px">
-                            <input type="submit" class="btn btn-primary btn-sm active" value="Leave comment"/>
-                        </div>
-                        <div>
-                            <p>
-                                <a class="btn btn-warning" data-toggle="collapse" href="oneComment.html" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Comments</a></p>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="collapse multi-collapse" id="multiCollapseExample1">
-                                        <div data-th-each="Message: ${comments}" class="card card-body">
-                                            <div data-th-text="${Message.author}"></div>
-                                            <div data-th-text="${Message.text}"></div>
-                                            <div data-th-text="${{Message.creationDate}}"></div>
-                                            <div data-th-text="${{Message.topic.title}}"></div>
-                                        </div>
+                    <div  >
+                        <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapseExample">
+                            <span data-th-text="'Comments (' + ${Message.comments.size()} +')' " class="ml-2">Comments</span>
+                        </button>
+                        <div class="row">
+                            <div class="col">
+                                <div class="collapse multi-collapse" id="collapse">
+                                    <div data-th-each="Message: ${comments}" class="card card-body">
+                                        <div data-th-text="${Message.author}"></div>
+                                        <div data-th-text="${Message.text}"></div>
+                                        <div data-th-text="${{Message.creationDate}}"></div>
+                                        <div data-th-text="${{Message.topic.title}}"></div>
                                     </div>
+                                    <!--
+                                    <div data-th-if="${!Message.comments.isEmpty()}">
+                                        <div data-th-replace="oneComment :: myComments)"></div>
+                                    </div>
+                                    -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 </body>

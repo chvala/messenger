@@ -1,7 +1,9 @@
 package hu.progmatic.services;
 
 import hu.progmatic.modell.Message;
+import hu.progmatic.modell.Message_;
 import hu.progmatic.modell.Topic;
+import hu.progmatic.modell.Topic_;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,46 +26,80 @@ public class MessageService {
     @PersistenceContext
     EntityManager em;
 
+
     private static Logger LOGGER = LoggerFactory.getLogger(MessageService.class);
 
-    public List<Message> filterMessages(String nameOrder, Integer max, Integer ID, String text, boolean isHidden, Integer topicID) {
-        List<Message> messages = em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
-        List<Message> filteredMessages = messages;
+    public List<Message> filterMessages(String nameOrder, Integer max, Integer ID, String text, LocalDate time, boolean isHidden, Integer topicID) {
         LOGGER.info("filteredMessages method started");
         LOGGER.debug("id: {}, nameOrder: {}, text: {}", ID, nameOrder, text);
-        Stream<Message> filteredMessagesStream = filteredMessages.stream();
+
+        /////////--------
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Message> cQuery = cb.createQuery(Message.class);
+        Root<Message> messageRoot = cQuery.from(Message.class);
+        /////////--------
+        List<Message> messages = em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
+        Stream<Message> filteredMessagesStream = messages.stream();
+        /////////--------
 
 
         if (isHidden) {
             filteredMessagesStream = filteredMessagesStream.filter(m -> !m.isHidden());
         }
 
+
         if (nameOrder != null) {
-            if (nameOrder.equals("abc")) {
-                filteredMessagesStream = filteredMessagesStream.sorted(Comparator.comparing(Message::getAuthor));
-            } else if (nameOrder.equals("cba")) {
-                filteredMessagesStream = filteredMessagesStream.sorted(Comparator.comparing(Message::getAuthor).reversed());
-            } else if (nameOrder.equals("123")) {
-                filteredMessagesStream = filteredMessagesStream.sorted(Comparator.comparing(Message::getID));
-            } else if (nameOrder.equals("isDeleted")) {
-                filteredMessagesStream = filteredMessagesStream.filter(Message::isHidden);
-            } else if (nameOrder.equals("topic")) {
-                filteredMessagesStream = filteredMessagesStream.sorted(Comparator.comparing(message -> message.getTopic().getTitle()));
+            switch (nameOrder) {
+                case "abc":
+                    cQuery = cQuery.orderBy(cb.asc(messageRoot.get(Message_.author)));
+                    break;
+                case "cba":
+                    cQuery = cQuery.orderBy(cb.desc(messageRoot.get(Message_.author)));
+                    break;
+                case "123":
+                    cQuery = cQuery.orderBy(cb.asc(messageRoot.get(Message_.I_D)));
+                    break;
+                case "isDeleted":
+                    cQuery = cQuery.orderBy(cb.asc(messageRoot.get(Message_.isHidden)));
+                    break;
+                case "topic":
+                    cQuery = cQuery.orderBy(cb.asc(messageRoot.get(Message_.topic.getName())));
+                    break;
             }
+            filteredMessagesStream = em.createQuery(cQuery).getResultList().stream();
         }
         if (topicID != null) {
-            filteredMessagesStream = filteredMessagesStream.filter(message -> message.getTopic().getID()==topicID);
+            filteredMessagesStream = filteredMessagesStream.filter(message -> message.getTopic().getID() == topicID);
         }
-        filteredMessages = filteredMessagesStream
-                .filter(m -> text == null ||
-                        m.getText().contains(text) ||
-                        m.getAuthor().contains(text) ||
-                        m.getCreationDate().toString().contains(text) ||
-                        m.getTopic().getTitle().contains(text))
-                .collect(Collectors.toList());
-        return filteredMessages;
+        if (time != null) {
+            cQuery.select(messageRoot).where(cb.between(messageRoot.get(Message_.creationDate), time.atStartOfDay(), time.atTime(23, 59)));
+            // time.plusDays(1).atStartOfDay())
+            filteredMessagesStream = em.createQuery(cQuery).getResultList().stream();
+        }
+        if (text.length() > 2) {
+            LOGGER.debug("id: {}, text: {}", ID, text);
+
+            cQuery.select(messageRoot).where(cb.or(
+
+                    (cb.like(messageRoot.get(Message_.author), "%" + text + "%")),
+                    (cb.like(messageRoot.get(Message_.text), "%" + text + "%")),
+                    (cb.equal(messageRoot.get(Message_.topic).get(Topic_.title), text))));
+            LOGGER.debug("Author: " + Message_.author);
+            LOGGER.debug("MessageText: " + Message_.text);
+
+            filteredMessagesStream = em.createQuery(cQuery).getResultList().stream();
+        }
+        return filteredMessagesStream.collect(Collectors.toList());
     }
 
+    @Transactional
+    public Message getMessage(Integer ID, Integer sleep) throws InterruptedException {
+        Message message = em.find(Message.class, ID);
+        Thread.sleep(sleep * 1000);
+        Message message2 = em.find(Message.class, ID);
+
+        return message;
+    }
     @Transactional
     public Message getMessage(Integer ID) {
         Message message = em.find(Message.class, ID);
@@ -67,9 +107,7 @@ public class MessageService {
     }
 
     public int getSize() {
-        List<Message> messages = em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
-
-        return messages.size();
+        return em.createQuery("SELECT m FROM Message m", Message.class).getResultList().size();
     }
 
     @Transactional
