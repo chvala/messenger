@@ -4,6 +4,7 @@ import hu.progmatic.session.UserSessionDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
@@ -22,7 +23,6 @@ public class StatisticController {
     }
 
     static HashMap<String, Integer> nameAndMessagesCounter = new HashMap<>();
-
 
     @RequestMapping(value = {"/Statistic"}, method = GET)
     public String Statistic(Model model) {

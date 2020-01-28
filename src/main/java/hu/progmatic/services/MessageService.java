@@ -145,7 +145,7 @@ public class MessageService {
                     "SELECT m FROM Message m where m.ID=:ID", Message.class)
                     .setParameter("ID", ID)
                     .getSingleResult();
-            em.remove(message);
+            em.remove(getMessage(ID));
             return true;
         }
         return false;

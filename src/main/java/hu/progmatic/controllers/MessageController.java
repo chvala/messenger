@@ -79,7 +79,7 @@ public class MessageController {
                                @RequestParam(value = "nameOrder", required = false) String nameOrder,
                                @RequestParam(value = "text",  required = false, defaultValue = "")String text,
                                @RequestParam(value = "time",  required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate time,
-                               @RequestParam(value = "hide", defaultValue = "true", required = false) boolean isHidden,
+                               @RequestParam(value = "hide", required = false) boolean isHidden,
                                @RequestParam(value = "topicID", required = false) Integer topicID,
                                Model model) {
         List<Message> filteredMessages = messageService.filterMessages(nameOrder, max, ID, text,time, isHidden, topicID);

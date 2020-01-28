@@ -28,7 +28,6 @@ public class DeleteController {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = {"/hide/{ID}"})
     public String hide(@PathVariable Integer ID) {
         if (SecurityContextHolder
