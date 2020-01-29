@@ -6,18 +6,17 @@ public class MessageServiceDTO {
     private int ID;
     private String author;
     private String text;
-    private boolean isHidden;
-    private Topic topic;
+    private String topic;
 
     public int getID() {
         return ID;
     }
 
-    public Topic getTopic() {
+    public String getTopic() {
         return topic;
     }
 
-    public void setTopic(Topic topic) {
+    public void setTopic(String topic) {
         this.topic = topic;
     }
 
@@ -41,11 +40,5 @@ public class MessageServiceDTO {
         this.text = text;
     }
 
-    public boolean isHidden() {
-        return isHidden;
-    }
 
-    public void setHidden(boolean hidden) {
-        isHidden = hidden;
-    }
 }

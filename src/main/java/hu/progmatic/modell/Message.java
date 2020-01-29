@@ -45,10 +45,10 @@ public class Message {
     @ManyToOne
     private myUser myuser;
     
-    @JsonIgnore
+
     @OneToMany(mappedBy = "messageForComment")
     private List<Message> comments;
-    @JsonIgnore
+
     @ManyToOne
     private Message messageForComment;
 

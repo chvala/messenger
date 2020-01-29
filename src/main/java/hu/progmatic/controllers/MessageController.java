@@ -61,12 +61,7 @@ public class MessageController {
         Thread.sleep(1000 * secondsToSleep);
         return "Message";
     }
-    @RequestMapping(path = "/messagetable/jason", method = RequestMethod.GET)
-    public @ResponseBody
-    List<MessageServiceDTO> messageTableJson(){
-        List<MessageServiceDTO> allMessages = messageService.findAllMessages();
-        return allMessages;
-    }
+
     @DeleteMapping(path = "messagetable/delete/{ID}")
     public @ResponseBody boolean restDelete(@PathVariable Integer ID) {
         return messageService.delete(ID);

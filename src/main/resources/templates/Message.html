@@ -23,6 +23,7 @@
             background-image: url("https://images.unsplash.com/photo-1497250681960-ef046c08a56e?ixlib=rb-1.2.1&w=1000&q=80");
         }
     </style>
+
 </head>
 <body>
 <div data-th-replace="Navbar :: Navbar"></div>
@@ -91,7 +92,7 @@
             <td data-th-text="${{Message.topic.title}}"></td>
 
 
-            <td >
+            <td>
                 <a data-th-href="@{/hide/{ID}(ID=${Message.ID})}" role="button" class="btn btn-outline-danger btn-sm">Hide</a>
             </td>
             <td data-sec-authorize="hasRole('ADMIN')">
@@ -102,20 +103,31 @@
 
     </table>
     <script>
-        $('.deleteButton').click(function(event){
+        $('.deleteButton').click(function (event) {
             let ID = event.target.closest('tr').querySelector('.msgID').innerText;
-            $.ajax('messagetable/delete/'+ID, {
+            $.ajax('messagetable/delete/' + ID, {
                 method: "DELETE",
-                beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("input[name='_csrf']")[0].value);},
-                success: function(data) {
+
+                //beforeSend: function(xhr){xhr.setRequestHeader('X-CSRF-TOKEN', $("input[name='_csrf']")[0].value);},
+
+                success: function (data) {
                     let selector = ".msgID:contains('" + ID + "')";
                     $('#msgtbody tr').has(selector).fadeOut(3000);
                 },
-                error:function(err){
+                error: function (err) {
                     alert('Nem törölhető, mert tartozik hozzá comment');
                 }
             })
         })
+       // $.ajax({
+       //     type: "GET",
+       //     url: "rest/messagetable/",
+       //     async: true,
+       //         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');
+       //         },
+       //     success: function (data){
+       //         console.log(data);
+       //     }});
     </script>
 </div>
 </body>

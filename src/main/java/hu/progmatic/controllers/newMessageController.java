@@ -59,8 +59,7 @@ public class newMessageController {
 
     @Transactional
     @PostMapping(path = "/createMessage")
-    public String createMessage(@Valid @ModelAttribute("Message") Message m, BindingResult bindingResult,
-                                @ModelAttribute("Topic") Topic topic) {
+    public String createMessage(@Valid @ModelAttribute("Message") Message m, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "newMessage";

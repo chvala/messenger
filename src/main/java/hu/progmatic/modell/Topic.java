@@ -15,7 +15,6 @@ public class Topic {
     @NotNull
     private String title;
 
-    @JsonIgnore
     @OneToMany(cascade = REMOVE, mappedBy = "topic")
     private List<Message> messages;
 

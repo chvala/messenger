@@ -124,15 +124,13 @@ public class MessageService {
         messages.removeIf(message -> message.getID().equals(ID));
     }
 
-    public List<MessageServiceDTO> findAllMessages() {
-        List<Message> msgs = em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
-        return msgs.stream().map(message -> {
+    public List<MessageServiceDTO> convertMessageListToDTOList(List<Message> incomeList) {
+        return incomeList.stream().map(message -> {
             MessageServiceDTO dto = new MessageServiceDTO();
             dto.setAuthor(message.getAuthor());
-            dto.setHidden(message.isHidden());
             dto.setID(message.getID());
             dto.setText(message.getText());
-            dto.setTopic(message.getTopic());
+            dto.setTopic(message.getTopic().getTitle());
             return dto;
         }).collect(Collectors.toList());
     }
@@ -145,7 +143,7 @@ public class MessageService {
                     "SELECT m FROM Message m where m.ID=:ID", Message.class)
                     .setParameter("ID", ID)
                     .getSingleResult();
-            em.remove(getMessage(ID));
+            em.remove(message);
             return true;
         }
         return false;
