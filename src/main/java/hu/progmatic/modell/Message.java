@@ -24,7 +24,6 @@ public class Message {
 
     @Column(name = "text")
     @NotNull
-    @Size(min = 2, max = 100)
     @NotBlank
     private String text;
 
@@ -47,6 +46,7 @@ public class Message {
     
 
     @OneToMany(mappedBy = "messageForComment")
+    @JsonIgnore
     private List<Message> comments;
 
     @ManyToOne

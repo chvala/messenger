@@ -1,9 +1,13 @@
 package hu.progmatic.controllers;
 
 import hu.progmatic.dto.MessageServiceDTO;
+import hu.progmatic.exceptions.MessageHasComments;
+import hu.progmatic.exceptions.MessageNotFoundException;
 import hu.progmatic.modell.Message;
 import hu.progmatic.modell.myUser;
 import hu.progmatic.services.MessageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +23,7 @@ import java.util.List;
 @RestController
 public class RestMessageController {
 
+    private static final Logger logger = LoggerFactory.getLogger(RestMessageController.class);
     private MessageService messageService;
 
     @Autowired
@@ -41,6 +46,12 @@ public class RestMessageController {
     @Transactional
     @DeleteMapping(path = "/rest/messagetable/delete/{ID}")
     public boolean restDelete(@PathVariable Integer ID) {
+      // if (messageService.getMessage(ID).getComments().size() >= 1) {
+      //     throw new MessageHasComments();
+      // }
+      // if (!messageService.delete(ID)) {
+      //     throw new MessageNotFoundException();
+      // }
         return messageService.delete(ID);
     }
 
@@ -68,8 +79,9 @@ public class RestMessageController {
         String name = user.getUsername();
         m.setAuthor(name);
         m.setCreationDate(LocalDateTime.now());
+                     logger.debug("Message author: "+ m.getAuthor());
+                     logger.debug("Message text: "+ m.getText());
         messageService.add(m);
-
         return m;
     }
 

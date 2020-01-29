@@ -16,6 +16,7 @@ public class Topic {
     private String title;
 
     @OneToMany(cascade = REMOVE, mappedBy = "topic")
+    @JsonIgnore
     private List<Message> messages;
 
     @Id

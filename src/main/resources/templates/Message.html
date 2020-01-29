@@ -8,6 +8,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+
     <style>
         head {
             color: #f1f1f1;
@@ -89,7 +91,7 @@
             <td data-th-text="${Message.author}"></td>
             <td data-th-text="${Message.text}"></td>
             <td data-th-text="${{Message.creationDate}}"></td>
-            <td data-th-text="${{Message.topic.title}}"></td>
+            <td data-th-text="${{Message.topic.title}}"><td>
 
 
             <td>
@@ -119,15 +121,9 @@
                 }
             })
         })
-       // $.ajax({
-       //     type: "GET",
-       //     url: "rest/messagetable/",
-       //     async: true,
-       //         beforeSend: function(xhr){xhr.setRequestHeader('Accept', 'application/json');
-       //         },
-       //     success: function (data){
-       //         console.log(data);
-       //     }});
+    </script>
+    <script>
+        CKEDITOR.replace('reader1');
     </script>
 </div>
 </body>

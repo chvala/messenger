@@ -1,6 +1,8 @@
 package hu.progmatic.services;
 
 import hu.progmatic.dto.MessageServiceDTO;
+import hu.progmatic.exceptions.MessageHasComments;
+import hu.progmatic.exceptions.MessageNotFoundException;
 import hu.progmatic.modell.Message;
 import hu.progmatic.modell.Message_;
 import hu.progmatic.modell.Topic;
@@ -138,13 +140,17 @@ public class MessageService {
 
     @Transactional
     public boolean delete(Integer ID) {
-        if (getMessage(ID) != null) {
-            Message message = em.createQuery(
-                    "SELECT m FROM Message m where m.ID=:ID", Message.class)
-                    .setParameter("ID", ID)
-                    .getSingleResult();
-            em.remove(message);
+        Message oneMessage = getMessage(ID);
+
+        if (oneMessage != null && oneMessage.getComments().size() >= 1) {
+            throw new MessageHasComments();
+        }
+        if (oneMessage != null) {
+            em.remove(oneMessage);
             return true;
+        }
+        if (oneMessage == null) {
+            throw new MessageNotFoundException();
         }
         return false;
     }
