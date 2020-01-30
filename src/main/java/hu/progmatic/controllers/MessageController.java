@@ -1,22 +1,18 @@
 package hu.progmatic.controllers;
 
-import hu.progmatic.dto.MessageServiceDTO;
 import hu.progmatic.modell.Message;
 import hu.progmatic.services.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Version;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +42,7 @@ public class MessageController {
         model.addAttribute("comments", comments);
         return "oneMessage";
     }
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @RequestMapping(value = {"/modifymessage"}, method = GET)
     public String loadModifiedMessages(
@@ -63,7 +60,8 @@ public class MessageController {
     }
 
     @DeleteMapping(path = "messagetable/delete/{ID}")
-    public @ResponseBody boolean restDelete(@PathVariable Integer ID) {
+    public @ResponseBody
+    boolean restDelete(@PathVariable Integer ID) {
         return messageService.delete(ID);
     }
 
@@ -72,16 +70,15 @@ public class MessageController {
     public String loadMessages(@RequestParam(value = "max", required = false) Integer max,
                                @RequestParam(value = "ID", required = false) Integer ID,
                                @RequestParam(value = "nameOrder", required = false) String nameOrder,
-                               @RequestParam(value = "text",  required = false, defaultValue = "")String text,
-                               @RequestParam(value = "time",  required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate time,
+                               @RequestParam(value = "text", required = false, defaultValue = "") String text,
+                               @RequestParam(value = "time", required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate time,
                                @RequestParam(value = "hide", required = false) boolean isHidden,
                                @RequestParam(value = "topicID", required = false) Integer topicID,
                                Model model) {
-        List<Message> filteredMessages = messageService.filterMessages(nameOrder, max, ID, text,time, isHidden, topicID);
+        List<Message> filteredMessages = messageService.filterMessages(nameOrder, max, ID, text, time, isHidden, topicID);
         model.addAttribute("messageList", filteredMessages);
         return "Message";
     }
-
 
 }
 

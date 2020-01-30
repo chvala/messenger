@@ -22,7 +22,7 @@ public class Message {
     // @Pattern(regexp = "^[A-Z].*", message = "Doesn't start with capital letter")
     private String author;
 
-    @Column(name = "text")
+    @Column(name = "text", length = 1000)
     @NotNull
     @NotBlank
     private String text;
