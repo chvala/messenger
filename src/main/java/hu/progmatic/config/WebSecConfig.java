@@ -1,5 +1,7 @@
 package hu.progmatic.config;
 
+import hu.progmatic.services.CustomOAuth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,9 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class WebSecConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
 
     @Override
@@ -28,11 +33,18 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/home").permitAll()
                 .antMatchers("/Register").permitAll()
+                .antMatchers("/oauth_login").permitAll()
                 .antMatchers("/style/*", "/images/*").permitAll()
                 .antMatchers("/delete/*", "/usersTable").hasRole("ADMIN")
                 .antMatchers("/webjars/bootstrap/**", "/webjars/jquery/**", "/webjars/popper.js/**").permitAll()
                 .antMatchers("/Statistic").hasRole("ADMIN")
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login()
+                .loginPage("/Login").permitAll()
+                .defaultSuccessUrl("/messagetable", true)
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
     }
 
     @SuppressWarnings("deprecation")
@@ -40,5 +52,6 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 }

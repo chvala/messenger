@@ -18,8 +18,19 @@
 
         <label><h2>New Message</h2>
 
-            <div class="form-group">
-                <form method="POST" data-th-action="@{/createMessage}" data-th-object="${Message}">
+            <form method="POST" data-th-action="@{/createMessage}" data-th-object="${Message}">
+                <div class="form-group">
+                    <form class="md-form">
+                        <div class="file-field">
+                            <a class="btn-floating peach-gradient mt-0 float-left">
+                                <i class="fas fa-paperclip" aria-hidden="true"></i>
+                                <input type="file">
+                            </a>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Upload your file">
+                            </div>
+                        </div>
+                    </form>
                     <textarea name="editor1" id="editor1" data-th-field="*{text}" class="form-control"
                               data-th-errorclass="is-invalid" type="text" placeholder="Here write your text"
                               rows="5"></textarea>
@@ -35,12 +46,12 @@
                             </option>
                         </select>
                     </div>
-                </form>
-                <a href="/newTopic" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Create new
-                    Topic</a>
-            </div>
-        </label>
+            </form>
+            <a href="/newTopic" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Create new
+                Topic</a>
     </div>
+    </label>
+</div>
 </div>
 <script>
     CKEDITOR.replace('editor1');

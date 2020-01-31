@@ -2,20 +2,17 @@ package hu.progmatic.modell;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static javax.persistence.CascadeType.REMOVE;
 @Entity
-public class myUser implements UserDetails {
+public class myUser implements UserDetails, OAuth2User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer ID;
@@ -116,6 +113,11 @@ public class myUser implements UserDetails {
         return authorities;
     }
 
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -144,4 +146,8 @@ public class myUser implements UserDetails {
         authorities.add(new Authorities(auth));
     }
 
+    @Override
+    public String getName() {
+        return null;
+    }
 }
